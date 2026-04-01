@@ -26,12 +26,9 @@ class SendYesterdayTransactions extends Command
         Excel::store(new TransactionsExport($yesterday), $fileName, 'local');
 
         // 2. Kirim Email
-        // Dapatkan path absolut dari storage local
-        $absolutePath = Storage::disk('local')->path($fileName);
-
         if (Storage::disk('local')->exists($fileName)) {
             Mail::to('interview.deltasurya@yopmail.com')
-                ->send(new TransactionReportMail($absolutePath, $dateString));
+                ->send(new TransactionReportMail($fileName, $dateString));
 
             $this->info('Laporan transaksi kemarin berhasil dikirim ke email.');
         } else {

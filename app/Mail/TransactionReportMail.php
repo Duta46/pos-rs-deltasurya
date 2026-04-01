@@ -33,15 +33,17 @@ class TransactionReportMail extends Mailable
     {
         return new Content(
             view: 'emails.transaction_report',
-            with: ['date' => $this->reportDate]
+            with: [
+                'date' => $this->reportDate,
+                'fileName' => 'laporan_transaksi_' . $this->reportDate . '.xlsx'
+            ]
         );
     }
 
     public function attachments(): array
     {
-        // Menggunakan fromPath dengan path absolut kembali, tapi dengan properti public
         return [
-            Attachment::fromPath($this->filePath)
+            Attachment::fromStorageDisk('local', $this->filePath)
                 ->as('laporan_transaksi_' . $this->reportDate . '.xlsx'),
         ];
     }
